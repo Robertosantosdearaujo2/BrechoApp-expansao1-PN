@@ -10,6 +10,9 @@
         public int? IdCentroOrigem { get; set; }   // usado em Saída e Transferência
         public int? IdCentroDestino { get; set; }  // usado em Entrada e Transferência
 
+        // AGORA OBRIGATÓRIO — evita o erro
+        public int IdCentroFinanceiro { get; set; }
+
         public string Categoria { get; set; }      // Venda, Comissão, Despesa, Transferência...
         public string Descricao { get; set; }
 

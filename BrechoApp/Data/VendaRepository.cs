@@ -47,7 +47,7 @@ namespace BrechoApp.Data
         }
 
         // ============================================================
-        //  SALVAR VENDA (com itens e pagamentos)
+        //  SALVAR VENDA (com itens, pagamentos e movimentação financeira)
         // ============================================================
         public void SalvarVenda(Venda venda)
         {
@@ -114,9 +114,9 @@ namespace BrechoApp.Data
                     cmdItem.ExecuteNonQuery();
                 }
 
-                // 3. Inserir pagamentos
+                // 3. Inserir pagamentos + movimentação financeira
                 string sqlPagamento = @"
-                    INSERT INTO VendasPagamentos (
+                    INSERT INTO VendaPagamentos (
                         IdVenda, TipoPagamento, Valor
                     ) VALUES (
                         @IdVenda, @TipoPagamento, @Valor
@@ -130,6 +130,24 @@ namespace BrechoApp.Data
                     cmdPag.Parameters.AddWithValue("@TipoPagamento", pag.Tipo.ToString());
                     cmdPag.Parameters.AddWithValue("@Valor", pag.Valor);
                     cmdPag.ExecuteNonQuery();
+
+                    // ============================================
+                    //  REGISTRAR MOVIMENTAÇÃO FINANCEIRA
+                    // ============================================
+                    var mov = new MovimentacaoFinanceira
+                    {
+                        Data = DateTime.Now,
+                        Tipo = "Entrada",
+                        Valor = pag.Valor, // agora decimal
+                        IdCentroFinanceiro = pag.IdCentroFinanceiro,
+                        IdVenda = idVenda,
+                        Categoria = "Venda",
+                        Descricao = $"Pagamento da venda {venda.CodigoVenda}",
+                        Previsto = false
+                    };
+
+                    var financeiroService = new FinanceiroService(_connectionString);
+                    financeiroService.RegistrarMovimentacao(mov);
                 }
 
                 // 4. Atualizar status dos produtos
@@ -416,7 +434,7 @@ namespace BrechoApp.Data
 
             string sql = @"
                 SELECT TipoPagamento, Valor
-                FROM VendasPagamentos
+                FROM VendaPagamentos
                 WHERE IdVenda = @IdVenda;
             ";
 
@@ -430,7 +448,7 @@ namespace BrechoApp.Data
                 lista.Add(new Pagamento
                 {
                     Tipo = Enum.Parse<TipoPagamento>(reader["TipoPagamento"].ToString()),
-                    Valor = Convert.ToDouble(reader["Valor"], CultureInfo.InvariantCulture)
+                    Valor = Convert.ToDecimal(reader["Valor"], CultureInfo.InvariantCulture)
                 });
             }
 

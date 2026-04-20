@@ -229,5 +229,34 @@ namespace BrechoApp.Data
                 cmd.ExecuteNonQuery();
             }
         }
+
+        // ============================================================
+        // REGISTRAR MOVIMENTAÇÃO FINANCEIRA  (NOVO)
+        // ============================================================
+        public void RegistrarMovimentacao(MovimentacaoFinanceira mov)
+        {
+            using (var conn = new SqliteConnection(_connectionString))
+            {
+                conn.Open();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO MovimentacoesFinanceiras
+                    (Data, Tipo, Valor, IdCentroFinanceiro, IdVenda, Categoria, Descricao, Previsto)
+                    VALUES ($data, $tipo, $valor, $centro, $venda, $categoria, $descricao, $previsto)
+                ";
+
+                cmd.Parameters.AddWithValue("$data", mov.Data);
+                cmd.Parameters.AddWithValue("$tipo", mov.Tipo);
+                cmd.Parameters.AddWithValue("$valor", mov.Valor);
+                cmd.Parameters.AddWithValue("$centro", mov.IdCentroFinanceiro);
+                cmd.Parameters.AddWithValue("$venda", mov.IdVenda);
+                cmd.Parameters.AddWithValue("$categoria", mov.Categoria);
+                cmd.Parameters.AddWithValue("$descricao", mov.Descricao);
+                cmd.Parameters.AddWithValue("$previsto", mov.Previsto);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

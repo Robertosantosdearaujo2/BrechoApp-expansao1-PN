@@ -61,7 +61,9 @@ namespace BrechoApp
                 Pagamentos.Add(new Pagamento
                 {
                     Tipo = tipo,
-                    Valor = valor
+
+                    // 🔥 CORREÇÃO: double → decimal
+                    Valor = Convert.ToDecimal(valor)
                 });
             }
 
