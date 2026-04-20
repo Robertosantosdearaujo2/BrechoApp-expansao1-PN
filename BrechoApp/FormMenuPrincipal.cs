@@ -1,5 +1,17 @@
 ﻿namespace BrechoApp
 {
+    // TESTE: Comentário técnico para gerar fluxo de chamadas no GitHub
+
+    /// <summary>
+    /// Tela principal do sistema.
+    /// Centraliza o acesso aos módulos disponíveis.
+    /// </summary>
+    public partial class FormMenuPrincipal : Form
+    {
+
+
+
+
     /// <summary>
     /// Tela principal do sistema.
     /// Centraliza o acesso aos módulos disponíveis.
