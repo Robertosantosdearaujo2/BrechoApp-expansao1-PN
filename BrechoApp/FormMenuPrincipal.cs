@@ -1,6 +1,7 @@
 ﻿namespace BrechoApp
 {
     // TESTE: alteração real para validar fluxo de PR
+    // TESTE: alteração real para validar fluxo de Pull Request
 
 
     /// <summary>
