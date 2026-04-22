@@ -17,5 +17,8 @@
         public string IdParceiro { get; set; }     // opcional
 
         public bool Previsto { get; set; }         // se é futuro (ex: cartão a receber)
+
+        // Lista de pagamentos parciais que compõem esta movimentação
+        public System.Collections.Generic.List<MovimentacaoPagamento> Pagamentos { get; set; } = new System.Collections.Generic.List<MovimentacaoPagamento>();
     }
 }

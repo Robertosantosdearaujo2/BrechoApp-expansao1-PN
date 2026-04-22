@@ -92,6 +92,9 @@ namespace BrechoApp
             form.ShowDialog();
         }
 
+        // Atalho direto para cadastro de categorias financeiras
+        // (removed) direct shortcut to financial categories - kept in Administration menu only
+
         // ============================================================
         // BOTÃO: MARKETING
         // Módulo ainda não implementado

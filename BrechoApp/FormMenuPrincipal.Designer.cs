@@ -139,6 +139,8 @@
             this.btnAdministracao.UseVisualStyleBackColor = true;
             this.btnAdministracao.Click += new System.EventHandler(this.btnAdministracao_Click);
 
+            
+
             // ============================================================
             // BOTÃO: MARKETING
             // ============================================================

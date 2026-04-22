@@ -22,6 +22,12 @@ namespace BrechoApp
             form.ShowDialog();
         }
 
+        private void btnCategoriasFinanceiras_Click(object sender, EventArgs e)
+        {
+            using var form = new FormCadastroCategoriasFinanceiras();
+            form.ShowDialog(this);
+        }
+
         private void btnFechar_Click(object sender, EventArgs e)
         {
             this.Close();

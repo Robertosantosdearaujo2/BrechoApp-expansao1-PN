@@ -342,13 +342,40 @@ namespace BrechoApp.Data
                 CREATE TABLE IF NOT EXISTS CentrosFinanceiros (
                     IdCentroFinanceiro INTEGER PRIMARY KEY AUTOINCREMENT,
 
-                    Nome TEXT NOT NULL,
+                    Nome TEXT NOT NULL UNIQUE,
                     Tipo TEXT NOT NULL, -- Caixa, ContaCorrente, CartaoAReceber, ContasAReceber, ComissoesAPagar etc.
 
                     SaldoInicial REAL NOT NULL DEFAULT 0,
                     SaldoAtual REAL NOT NULL DEFAULT 0,
 
                     Ativo INTEGER NOT NULL DEFAULT 1
+                );
+
+                ---------------------------------------------------------
+                -- TABELA: FORMAS DE PAGAMENTO
+                -- Lista de métodos aceitos pelo sistema (Dinheiro, Pix, Cartão, Futuro...)
+                ---------------------------------------------------------
+                CREATE TABLE IF NOT EXISTS FormasPagamento (
+                    IdFormaPagamento INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nome TEXT NOT NULL UNIQUE,
+                    Codigo TEXT,
+                    Ativo INTEGER NOT NULL DEFAULT 1
+                );
+
+                ---------------------------------------------------------
+                -- TABELA: PAGAMENTOS POR MOVIMENTAÇÃO
+                -- Cada movimentação financeira pode ser dividida em várias linhas de pagamento
+                ---------------------------------------------------------
+                CREATE TABLE IF NOT EXISTS MovimentacaoPagamentos (
+                    IdPagamento INTEGER PRIMARY KEY AUTOINCREMENT,
+                    IdMovimentacao INTEGER NOT NULL,
+                    IdFormaPagamento INTEGER NOT NULL,
+                    IdCentroFinanceiro INTEGER NOT NULL,
+                    Valor REAL NOT NULL,
+
+                    FOREIGN KEY (IdMovimentacao) REFERENCES MovimentacoesFinanceiras (IdMovimentacao),
+                    FOREIGN KEY (IdFormaPagamento) REFERENCES FormasPagamento (IdFormaPagamento),
+                    FOREIGN KEY (IdCentroFinanceiro) REFERENCES CentrosFinanceiros (IdCentroFinanceiro)
                 );
 
                 ---------------------------------------------------------
@@ -444,6 +471,17 @@ namespace BrechoApp.Data
                 );
 
                 ---------------------------------------------------------
+                -- TABELA DE CATEGORIAS FINANCEIRAS
+                -- Usada para classificação de movimentações financeiras
+                ---------------------------------------------------------
+                CREATE TABLE IF NOT EXISTS CategoriasFinanceiras (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nome TEXT NOT NULL UNIQUE,
+                    Grupo TEXT,
+                    DataCriacao TEXT NOT NULL
+                );
+
+                ---------------------------------------------------------
                 -- TABELA DE PAGAMENTOS DA VENDA
                 -- Armazena cada linha de pagamento (suporte a Combinado)
                 ---------------------------------------------------------
@@ -461,6 +499,104 @@ namespace BrechoApp.Data
 
             using var cmd = new SqliteCommand(sql, connection);
             cmd.ExecuteNonQuery();
+
+            // Seed initial CentrosFinanceiros (only if not exists)
+            string seedCentros = @"
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Caixa', 'Caixa', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Caixa');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Conta Corrente Brecho', 'ContaCorrente', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Conta Corrente Brecho');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Conta Corrente Socio1', 'ContaCorrente', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Conta Corrente Socio1');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Conta Corrente Socio2', 'ContaCorrente', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Conta Corrente Socio2');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Conta Corrente Socio3', 'ContaCorrente', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Conta Corrente Socio3');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Contas a Receber', 'ContasAReceber', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Contas a Receber');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Contas a Pagar', 'ContasAPagar', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Contas a Pagar');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Cartão Credito1', 'Cartao', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Cartão Credito1');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Cartão Credito2', 'Cartao', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Cartão Credito2');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Cartão Debito1', 'Cartao', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Cartão Debito1');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Cartão Debito2', 'Cartao', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Cartão Debito2');
+                INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoInicial, SaldoAtual, Ativo)
+                SELECT 'Comissao PN', 'ComissoesAPagar', 0, 0, 1 WHERE NOT EXISTS(SELECT 1 FROM CentrosFinanceiros WHERE Nome = 'Comissao PN');
+            ";
+            using var seedCmd = new SqliteCommand(seedCentros, connection);
+            seedCmd.ExecuteNonQuery();
+
+            // Seed initial FormasPagamento
+            string seedFormas = @"
+                INSERT INTO FormasPagamento (Nome, Codigo, Ativo)
+                SELECT 'Dinheiro', 'DIN', 1 WHERE NOT EXISTS(SELECT 1 FROM FormasPagamento WHERE Nome = 'Dinheiro');
+                INSERT INTO FormasPagamento (Nome, Codigo, Ativo)
+                SELECT 'Depósito / Transferência / Pix', 'PIX', 1 WHERE NOT EXISTS(SELECT 1 FROM FormasPagamento WHERE Nome = 'Depósito / Transferência / Pix');
+                INSERT INTO FormasPagamento (Nome, Codigo, Ativo)
+                SELECT 'Futuro', 'FUT', 1 WHERE NOT EXISTS(SELECT 1 FROM FormasPagamento WHERE Nome = 'Futuro');
+                INSERT INTO FormasPagamento (Nome, Codigo, Ativo)
+                SELECT 'Cartão de Crédito', 'CC', 1 WHERE NOT EXISTS(SELECT 1 FROM FormasPagamento WHERE Nome = 'Cartão de Crédito');
+                INSERT INTO FormasPagamento (Nome, Codigo, Ativo)
+                SELECT 'Cartão de Débito', 'CD', 1 WHERE NOT EXISTS(SELECT 1 FROM FormasPagamento WHERE Nome = 'Cartão de Débito');
+            ";
+            using var seedFormasCmd = new SqliteCommand(seedFormas, connection);
+            seedFormasCmd.ExecuteNonQuery();
+
+            // Seed initial CategoriasFinanceiras (only if not exists)
+            string seedCategoriasFinanceiras = @"
+                -- Grupos principais
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'RECEITAS', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'RECEITAS');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'CUSTOS', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'CUSTOS');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'DESPESAS OPERACIONAIS', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'DESPESAS OPERACIONAIS');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'DESPESAS COM PESSOAL', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'DESPESAS COM PESSOAL');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'DESPESAS FINANCEIRAS', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'DESPESAS FINANCEIRAS');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'INVESTIMENTOS', NULL, datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'INVESTIMENTOS');
+
+                -- Subcategorias
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Receita de Vendas', 'RECEITAS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Receita de Vendas');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Outras Receitas', 'RECEITAS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Outras Receitas');
+
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Compra de Mercadorias', 'CUSTOS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Compra de Mercadorias');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Repasse a Consignados / PN', 'CUSTOS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Repasse a Consignados / PN');
+
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Despesas Administrativas', 'DESPESAS OPERACIONAIS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Despesas Administrativas');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Despesas de Marketing', 'DESPESAS OPERACIONAIS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Despesas de Marketing');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Despesas com Serviços', 'DESPESAS OPERACIONAIS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Despesas com Serviços');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Despesas Bancárias / Tarifas', 'DESPESAS OPERACIONAIS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Despesas Bancárias / Tarifas');
+
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Pró-Labore dos Sócios', 'DESPESAS COM PESSOAL', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Pró-Labore dos Sócios');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Colaboradores-Empregados', 'DESPESAS COM PESSOAL', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Colaboradores-Empregados');
+
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Juros / Multas', 'DESPESAS FINANCEIRAS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Juros / Multas');
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Descontos Concedidos', 'DESPESAS FINANCEIRAS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Descontos Concedidos');
+
+                INSERT INTO CategoriasFinanceiras (Nome, Grupo, DataCriacao)
+                SELECT 'Investimentos / Imobilizado', 'INVESTIMENTOS', datetime('now') WHERE NOT EXISTS(SELECT 1 FROM CategoriasFinanceiras WHERE Nome = 'Investimentos / Imobilizado');
+            ";
+            using var seedCategoriasFinanceirasCmd = new SqliteCommand(seedCategoriasFinanceiras, connection);
+            seedCategoriasFinanceirasCmd.ExecuteNonQuery();
 
             // Run migrations for existing databases
             RunMigrations(connection);
@@ -492,26 +628,8 @@ namespace BrechoApp.Data
                 System.Diagnostics.Debug.WriteLine($"Migration warning: {ex.Message}");
             }
 
-            // Migration: Create VendaPagamentos table if it doesn't exist
-            try
-            {
-                string createTableSql = @"
-                    CREATE TABLE IF NOT EXISTS VendaPagamentos (
-                        IdVendaPagamento INTEGER PRIMARY KEY AUTOINCREMENT,
-                        IdVenda INTEGER NOT NULL,
-                        FormaPagamento TEXT NOT NULL,
-                        Valor REAL NOT NULL,
-                        IdCentroFinanceiro INTEGER,
-                        FOREIGN KEY (IdVenda) REFERENCES Vendas (IdVenda),
-                        FOREIGN KEY (IdCentroFinanceiro) REFERENCES CentrosFinanceiros (IdCentroFinanceiro)
-                    );";
-                using var createCmd = new SqliteCommand(createTableSql, connection);
-                createCmd.ExecuteNonQuery();
-            }
-            catch (SqliteException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Migration warning (VendaPagamentos): {ex.Message}");
-            }
+            // Nota: a criação da tabela `VendaPagamentos` foi mantida no schema principal
+            // (bloco SQL em Initialize). Removido aqui para evitar duplicação.
         }
     }
 }

@@ -29,7 +29,6 @@
             this.cmbDestino = new System.Windows.Forms.ComboBox();
 
             this.lblCategoria = new System.Windows.Forms.Label();
-            this.txtCategoria = new System.Windows.Forms.TextBox();
 
             this.lblDescricao = new System.Windows.Forms.Label();
             this.txtDescricao = new System.Windows.Forms.TextBox();
@@ -93,8 +92,11 @@
             this.lblCategoria.Text = "Categoria:";
             this.lblCategoria.Location = new System.Drawing.Point(10, 185);
 
-            this.txtCategoria.Location = new System.Drawing.Point(120, 182);
-            this.txtCategoria.Size = new System.Drawing.Size(250, 23);
+            // Categoria agora é um ComboBox (permite seleção e digitação livre)
+            this.cmbCategoria = new System.Windows.Forms.ComboBox();
+            this.cmbCategoria.Location = new System.Drawing.Point(120, 182);
+            this.cmbCategoria.Size = new System.Drawing.Size(250, 23);
+            this.cmbCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
 
             // ============================================================
             // DESCRIÇÃO
@@ -132,7 +134,7 @@
             this.Controls.Add(this.lblDestino);
             this.Controls.Add(this.cmbDestino);
             this.Controls.Add(this.lblCategoria);
-            this.Controls.Add(this.txtCategoria);
+            this.Controls.Add(this.cmbCategoria);
             this.Controls.Add(this.lblDescricao);
             this.Controls.Add(this.txtDescricao);
             this.Controls.Add(this.btnSalvar);
@@ -162,7 +164,7 @@
         private System.Windows.Forms.ComboBox cmbDestino;
 
         private System.Windows.Forms.Label lblCategoria;
-        private System.Windows.Forms.TextBox txtCategoria;
+        private System.Windows.Forms.ComboBox cmbCategoria;
 
         private System.Windows.Forms.Label lblDescricao;
         private System.Windows.Forms.TextBox txtDescricao;

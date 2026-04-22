@@ -9,6 +9,7 @@ namespace BrechoApp
     {
         private readonly MovimentacaoFinanceiraRepository _repositoryMov;
         private readonly CentroFinanceiroRepository _repositoryCentros;
+        private readonly CategoriaFinanceiraRepository _repositoryCategorias;
 
         private readonly string _tipoMov; // Entrada, Saida, Transferencia
 
@@ -18,11 +19,13 @@ namespace BrechoApp
 
             _repositoryMov = new MovimentacaoFinanceiraRepository();
             _repositoryCentros = new CentroFinanceiroRepository();
+            _repositoryCategorias = new CategoriaFinanceiraRepository();
 
             _tipoMov = tipoMov;
 
             ConfigurarTela();
             CarregarCentros();
+            CarregarCategoriasFinanceiras();
         }
 
         // ============================================================
@@ -41,6 +44,28 @@ namespace BrechoApp
             {
                 lblDestino.Visible = false;
                 cmbDestino.Visible = false;
+            }
+        }
+
+        // ============================================================
+        // CARREGAR CATEGORIAS FINANCEIRAS
+        // ============================================================
+        private void CarregarCategoriasFinanceiras()
+        {
+            try
+            {
+                var lista = _repositoryCategorias.ListarTodas();
+
+                cmbCategoria.Items.Clear();
+
+                foreach (var c in lista)
+                {
+                    cmbCategoria.Items.Add(c.Nome);
+                }
+            }
+            catch
+            {
+                // Falha silenciosa — mantém comportamento atual
             }
         }
 
@@ -95,7 +120,7 @@ namespace BrechoApp
                 Data = dtData.Value,
                 Tipo = _tipoMov,
                 Valor = numValor.Value,
-                Categoria = txtCategoria.Text.Trim(),
+                Categoria = cmbCategoria.Text.Trim(),
                 Descricao = txtDescricao.Text.Trim(),
                 Previsto = false
             };
