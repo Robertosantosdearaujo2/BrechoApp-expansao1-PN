@@ -1,7 +1,7 @@
 ﻿namespace BrechoApp
 {
-    // TESTE: Comentário técnico para gerar fluxo de chamadas no GitHub
-    // TESTE: alteração para validar fluxo de PR
+    // TESTE: alteração real para validar fluxo de PR
+
 
     /// <summary>
     /// Tela principal do sistema.
