@@ -26,6 +26,7 @@
             this.btnComissoes = new System.Windows.Forms.Button();
             this.btnRelatoriosGerenciais = new System.Windows.Forms.Button();
             this.btnOperacoes = new System.Windows.Forms.Button();
+            this.btnAdministracao = new System.Windows.Forms.Button();
             this.btnMarketing = new System.Windows.Forms.Button();
 
             ((System.ComponentModel.ISupportInitialize)(this.pictureLogo)).BeginInit();
@@ -127,13 +128,25 @@
             this.btnOperacoes.Click += new System.EventHandler(this.btnOperacoes_Click);
 
             // ============================================================
+            // BOTÃO: ADMINISTRAÇÃO
+            // ============================================================
+            this.btnAdministracao.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.btnAdministracao.Location = new System.Drawing.Point(20, 540);
+            this.btnAdministracao.Name = "btnAdministracao";
+            this.btnAdministracao.Size = new System.Drawing.Size(260, 45);
+            this.btnAdministracao.TabIndex = 8;
+            this.btnAdministracao.Text = "Administração";
+            this.btnAdministracao.UseVisualStyleBackColor = true;
+            this.btnAdministracao.Click += new System.EventHandler(this.btnAdministracao_Click);
+
+            // ============================================================
             // BOTÃO: MARKETING
             // ============================================================
             this.btnMarketing.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.btnMarketing.Location = new System.Drawing.Point(20, 540);
+            this.btnMarketing.Location = new System.Drawing.Point(20, 595);
             this.btnMarketing.Name = "btnMarketing";
             this.btnMarketing.Size = new System.Drawing.Size(260, 45);
-            this.btnMarketing.TabIndex = 8;
+            this.btnMarketing.TabIndex = 9;
             this.btnMarketing.Text = "Marketing";
             this.btnMarketing.UseVisualStyleBackColor = true;
             this.btnMarketing.Click += new System.EventHandler(this.btnMarketing_Click);
@@ -143,8 +156,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 610);
+            this.ClientSize = new System.Drawing.Size(300, 665);
             this.Controls.Add(this.btnMarketing);
+            this.Controls.Add(this.btnAdministracao);
             this.Controls.Add(this.btnOperacoes);
             this.Controls.Add(this.btnRelatoriosGerenciais);
             this.Controls.Add(this.btnComissoes);
@@ -174,6 +188,7 @@
         private System.Windows.Forms.Button btnComissoes;
         private System.Windows.Forms.Button btnRelatoriosGerenciais;
         private System.Windows.Forms.Button btnOperacoes;
+        private System.Windows.Forms.Button btnAdministracao;
         private System.Windows.Forms.Button btnMarketing;
     }
 }
