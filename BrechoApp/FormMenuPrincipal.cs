@@ -1,17 +1,10 @@
-﻿namespace BrechoApp
+﻿using System;
+using System.Windows.Forms;
+
+namespace BrechoApp
 {
     // TESTE: alteração real para validar fluxo de PR
     // TESTE: alteração real para validar fluxo de Pull Request
-
-
-    /// <summary>
-    /// Tela principal do sistema.
-    /// Centraliza o acesso aos módulos disponíveis.
-    /// </summary>
-    public partial class FormMenuPrincipal : Form
-    {
-
-
 
 
     /// <summary>
@@ -86,6 +79,16 @@
         private void btnOperacoes_Click(object sender, EventArgs e)
         {
             var form = new FormOperacoes();
+            form.ShowDialog();
+        }
+
+        // ============================================================
+        // BOTÃO: ADMINISTRAÇÃO
+        // Abre o menu de administração
+        // ============================================================
+        private void btnAdministracao_Click(object sender, EventArgs e)
+        {
+            var form = new FormAdministracao();
             form.ShowDialog();
         }
 
