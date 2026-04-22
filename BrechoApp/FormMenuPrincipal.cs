@@ -1,5 +1,19 @@
 ﻿namespace BrechoApp
 {
+    // TESTE: alteração real para validar fluxo de PR
+    // TESTE: alteração real para validar fluxo de Pull Request
+
+
+    /// <summary>
+    /// Tela principal do sistema.
+    /// Centraliza o acesso aos módulos disponíveis.
+    /// </summary>
+    public partial class FormMenuPrincipal : Form
+    {
+
+
+
+
     /// <summary>
     /// Tela principal do sistema.
     /// Centraliza o acesso aos módulos disponíveis.
