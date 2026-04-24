@@ -18,7 +18,6 @@
             this.btnCentrosFinanceiros = new System.Windows.Forms.Button();
             this.btnMovimentacoes = new System.Windows.Forms.Button();
             this.btnFechar = new System.Windows.Forms.Button();
-
             this.SuspendLayout();
 
             // 
@@ -45,19 +44,6 @@
             this.btnMovimentacoes.UseVisualStyleBackColor = true;
             this.btnMovimentacoes.Click += new System.EventHandler(this.btnMovimentacoes_Click);
 
-            //
-            // btnCategoriasFinanceiras
-            //
-            this.btnCategoriasFinanceiras = new System.Windows.Forms.Button();
-            this.btnCategoriasFinanceiras.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.btnCategoriasFinanceiras.Location = new System.Drawing.Point(20, 130);
-            this.btnCategoriasFinanceiras.Name = "btnCategoriasFinanceiras";
-            this.btnCategoriasFinanceiras.Size = new System.Drawing.Size(260, 45);
-            this.btnCategoriasFinanceiras.TabIndex = 2;
-            this.btnCategoriasFinanceiras.Text = "Categorias Financeiras";
-            this.btnCategoriasFinanceiras.UseVisualStyleBackColor = true;
-            this.btnCategoriasFinanceiras.Click += new System.EventHandler(this.btnCategoriasFinanceiras_Click);
-
             // 
             // btnFechar
             // 
@@ -76,7 +62,6 @@
             this.ClientSize = new System.Drawing.Size(300, 250);
             this.Controls.Add(this.btnCentrosFinanceiros);
             this.Controls.Add(this.btnMovimentacoes);
-            this.Controls.Add(this.btnCategoriasFinanceiras);
             this.Controls.Add(this.btnFechar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -89,7 +74,6 @@
 
         private System.Windows.Forms.Button btnCentrosFinanceiros;
         private System.Windows.Forms.Button btnMovimentacoes;
-        private System.Windows.Forms.Button btnCategoriasFinanceiras;
         private System.Windows.Forms.Button btnFechar;
     }
 }

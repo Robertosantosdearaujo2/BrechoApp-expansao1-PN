@@ -12,17 +12,21 @@ namespace BrechoApp
 
         public FormCentroFinanceiroCadastro()
         {
+            // This form should no longer be available because CentrosFinanceiros are fixed.
+            // Disable initialization to prevent usage. Show message and close if invoked.
             InitializeComponent();
             _repo = new CentroFinanceiroRepository();
+            MessageBox.Show("Edição de Centros Financeiros foi desativada. Centros são gerados pelo sistema.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Load += (s, e) => this.Close();
         }
 
         public FormCentroFinanceiroCadastro(int idCentro)
         {
+            // Editing by id is disabled. Inform and close.
             InitializeComponent();
             _repo = new CentroFinanceiroRepository();
-            _idCentro = idCentro;
-
-            CarregarDados();
+            MessageBox.Show("Edição de Centros Financeiros foi desativada. Centros são gerados pelo sistema.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Load += (s, e) => this.Close();
         }
 
         private void CarregarDados()
@@ -44,45 +48,8 @@ namespace BrechoApp
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNome.Text))
-            {
-                MessageBox.Show("Informe o nome.");
-                return;
-            }
-
-            if (cboTipo.SelectedIndex < 0)
-            {
-                MessageBox.Show("Selecione o tipo.");
-                return;
-            }
-
-            if (!decimal.TryParse(txtSaldoInicial.Text, out decimal saldo))
-            {
-                MessageBox.Show("Saldo inválido.");
-                return;
-            }
-
-            var centro = new CentroFinanceiro
-            {
-                Nome = txtNome.Text.Trim(),
-                Tipo = cboTipo.SelectedItem.ToString(),
-                SaldoAtual = saldo,
-                Ativo = chkAtivo.Checked
-            };
-
-            if (_idCentro == null)
-            {
-                _repo.Inserir(centro);
-            }
-            else
-            {
-                centro.IdCentroFinanceiro = _idCentro.Value;
-                _repo.Atualizar(centro);
-            }
-
-            MessageBox.Show("Registro salvo com sucesso.");
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            // Disabled: saving is not allowed
+            MessageBox.Show("Edição/Criação de Centros Financeiros desativada.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

@@ -92,11 +92,12 @@
             this.lblCategoria.Text = "Categoria:";
             this.lblCategoria.Location = new System.Drawing.Point(10, 185);
 
-            // Categoria agora é um ComboBox (permite seleção e digitação livre)
+            // Categoria agora é um ComboBox (seleção apenas)
             this.cmbCategoria = new System.Windows.Forms.ComboBox();
             this.cmbCategoria.Location = new System.Drawing.Point(120, 182);
             this.cmbCategoria.Size = new System.Drawing.Size(250, 23);
-            this.cmbCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.cmbCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCategoria.SelectionChangeCommitted += new System.EventHandler(this.cmbCategoria_SelectionChangeCommitted);
 
             // ============================================================
             // DESCRIÇÃO

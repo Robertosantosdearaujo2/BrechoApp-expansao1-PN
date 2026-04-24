@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using BrechoApp.Data;
+using ClosedXML.Excel;
 
 namespace BrechoApp
 {
     public partial class FormCentroFinanceiro : Form
     {
         private readonly CentroFinanceiroRepository _repository;
-
+        // Export requires Microsoft.Office.Interop.Excel or use CSV fallback. We'll implement CSV export to keep dependencies minimal.
         public FormCentroFinanceiro()
         {
             InitializeComponent();
@@ -36,52 +37,69 @@ namespace BrechoApp
             }
         }
 
-        // ============================================================
-        // BOTÃO: NOVO
-        // ============================================================
-        private void btnNovo_Click(object sender, EventArgs e)
-        {
-            var form = new FormCentroFinanceiroCadastro();
-            form.ShowDialog();
-            CarregarCentros();
-        }
+        // CRUD removed: Centros Financeiros are fixed. Only export is available.
 
         // ============================================================
-        // BOTÃO: EDITAR
+        // BOTÃO: EXPORTAR PARA EXCEL (CSV)
         // ============================================================
-        private void btnEditar_Click(object sender, EventArgs e)
+        private void btnExportarExcel_Click(object sender, EventArgs e)
         {
-            if (dgvCentros.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Selecione um registro para editar.");
-                return;
+                var lista = _repository.Listar();
+
+                using (var sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+                    sfd.FileName = "centros_financeiros.xlsx";
+
+                    if (sfd.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    using (var wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("Centros Financeiros");
+
+                        ws.Cell(1, 1).Value = "CENTROS FINANCEIROS";
+                        ws.Cell(1, 1).Style.Font.Bold = true;
+                        ws.Cell(1, 1).Style.Font.FontSize = 14;
+
+                        ws.Cell(2, 1).Value = $"Gerado em: {DateTime.Now:dd/MM/yyyy HH:mm}";
+                        ws.Cell(2, 1).Style.Font.Italic = true;
+
+                        int row = 4;
+
+                        string[] headers = new[] { "Id", "Nome", "Tipo", "SaldoAtual", "Ativo" };
+
+                        for (int i = 0; i < headers.Length; i++)
+                            ws.Cell(row, i + 1).Value = headers[i];
+
+                        ws.Range(row, 1, row, headers.Length).Style.Font.Bold = true;
+
+                        row++;
+
+                        foreach (var c in lista)
+                        {
+                            ws.Cell(row, 1).Value = c.IdCentroFinanceiro;
+                            ws.Cell(row, 2).Value = c.Nome;
+                            ws.Cell(row, 3).Value = c.Tipo;
+                            ws.Cell(row, 4).Value = (double)c.SaldoAtual;
+                            ws.Cell(row, 4).Style.NumberFormat.Format = "R$ #,##0.00";
+                            ws.Cell(row, 5).Value = c.Ativo ? "Sim" : "Não";
+                            row++;
+                        }
+
+                        ws.Columns().AdjustToContents();
+
+                        wb.SaveAs(sfd.FileName);
+                    }
+                }
+
+                MessageBox.Show("Arquivo Excel gerado com sucesso.", "Exportar", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            int id = Convert.ToInt32(dgvCentros.SelectedRows[0].Cells[0].Value);
-
-            var form = new FormCentroFinanceiroCadastro(id);
-            form.ShowDialog();
-            CarregarCentros();
-        }
-
-        // ============================================================
-        // BOTÃO: EXCLUIR
-        // ============================================================
-        private void btnExcluir_Click(object sender, EventArgs e)
-        {
-            if (dgvCentros.SelectedRows.Count == 0)
+            catch (Exception ex)
             {
-                MessageBox.Show("Selecione um registro para excluir.");
-                return;
-            }
-
-            int id = Convert.ToInt32(dgvCentros.SelectedRows[0].Cells[0].Value);
-
-            if (MessageBox.Show("Confirma exclusão?", "Excluir",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                _repository.Excluir(id);
-                CarregarCentros();
+                MessageBox.Show($"Falha ao exportar: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -92,5 +110,7 @@ namespace BrechoApp
         {
             this.Close();
         }
+
+
     }
 }

@@ -41,7 +41,8 @@ namespace BrechoApp.Data
                             Valor = reader.GetDecimal(3),
                             IdCentroOrigem = reader.IsDBNull(4) ? null : reader.GetInt32(4),
                             IdCentroDestino = reader.IsDBNull(5) ? null : reader.GetInt32(5),
-                            Categoria = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                        Categoria = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                        Grupo = "",
                             Descricao = reader.IsDBNull(7) ? "" : reader.GetString(7),
                             IdVenda = reader.IsDBNull(8) ? null : reader.GetInt32(8),
                             IdParceiro = reader.IsDBNull(9) ? null : reader.GetString(9),
@@ -75,6 +76,22 @@ namespace BrechoApp.Data
                     }
                 }
             }
+                // Após carregar todas movimentações, preencher o campo Grupo consultando as categorias
+                var repoCat = new CategoriaFinanceiraRepository();
+                var cats = repoCat.ListarTodas();
+                var dict = new System.Collections.Generic.Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var c in cats)
+                {
+                    if (!string.IsNullOrWhiteSpace(c.Nome))
+                        dict[c.Nome] = c.Grupo ?? string.Empty;
+                }
+
+                foreach (var m in lista)
+                {
+                    if (!string.IsNullOrWhiteSpace(m.Categoria) && dict.ContainsKey(m.Categoria))
+                        m.Grupo = dict[m.Categoria];
+                }
+
 
             return lista;
         }

@@ -13,7 +13,6 @@ namespace BrechoApp.Data
             var lista = new List<CategoriaFinanceira>();
             using var conn = new SqliteConnection(_connectionString);
             conn.Open();
-
             using var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT Id, Nome, Grupo, DataCriacao FROM CategoriasFinanceiras ORDER BY Grupo, Nome";
 
@@ -25,7 +24,7 @@ namespace BrechoApp.Data
                     Id = reader.GetInt32(0),
                     Nome = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                     Grupo = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                    DataCriacao = reader.IsDBNull(3) ? DateTime.MinValue : DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                    DataCriacao = reader.IsDBNull(3) ? DateTime.MinValue : DateTime.Parse(reader.GetString(3), System.Globalization.CultureInfo.InvariantCulture)
                 });
             }
 

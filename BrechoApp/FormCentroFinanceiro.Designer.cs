@@ -16,9 +16,7 @@
         private void InitializeComponent()
         {
             this.dgvCentros = new System.Windows.Forms.DataGridView();
-            this.btnNovo = new System.Windows.Forms.Button();
-            this.btnEditar = new System.Windows.Forms.Button();
-            this.btnExcluir = new System.Windows.Forms.Button();
+            this.btnExportarExcel = new System.Windows.Forms.Button();
             this.btnFechar = new System.Windows.Forms.Button();
 
             this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,20 +53,10 @@
             // ============================================================
             // BOTÕES
             // ============================================================
-            this.btnNovo.Text = "Novo";
-            this.btnNovo.Location = new System.Drawing.Point(10, 320);
-            this.btnNovo.Size = new System.Drawing.Size(100, 35);
-            this.btnNovo.Click += new System.EventHandler(this.btnNovo_Click);
-
-            this.btnEditar.Text = "Editar";
-            this.btnEditar.Location = new System.Drawing.Point(120, 320);
-            this.btnEditar.Size = new System.Drawing.Size(100, 35);
-            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-
-            this.btnExcluir.Text = "Excluir";
-            this.btnExcluir.Location = new System.Drawing.Point(230, 320);
-            this.btnExcluir.Size = new System.Drawing.Size(100, 35);
-            this.btnExcluir.Click += new System.EventHandler(this.btnExcluir_Click);
+            this.btnExportarExcel.Text = "Exportar para Excel";
+            this.btnExportarExcel.Location = new System.Drawing.Point(10, 320);
+            this.btnExportarExcel.Size = new System.Drawing.Size(160, 35);
+            this.btnExportarExcel.Click += new System.EventHandler(this.btnExportarExcel_Click);
 
             this.btnFechar.Text = "Fechar";
             this.btnFechar.Location = new System.Drawing.Point(470, 320);
@@ -80,9 +68,7 @@
             // ============================================================
             this.ClientSize = new System.Drawing.Size(580, 370);
             this.Controls.Add(this.dgvCentros);
-            this.Controls.Add(this.btnNovo);
-            this.Controls.Add(this.btnEditar);
-            this.Controls.Add(this.btnExcluir);
+            this.Controls.Add(this.btnExportarExcel);
             this.Controls.Add(this.btnFechar);
 
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -97,9 +83,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvCentros;
-        private System.Windows.Forms.Button btnNovo;
-        private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnExcluir;
+        private System.Windows.Forms.Button btnExportarExcel;
         private System.Windows.Forms.Button btnFechar;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn colId;

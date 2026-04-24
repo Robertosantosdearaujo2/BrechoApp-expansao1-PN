@@ -51,6 +51,13 @@
             this.btnFiltrar.Size = new System.Drawing.Size(80, 28);
             this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
 
+            // Botão Exportar Excel
+            this.btnExportarExcel = new System.Windows.Forms.Button();
+            this.btnExportarExcel.Text = "Exportar Excel";
+            this.btnExportarExcel.Location = new System.Drawing.Point(530, 10);
+            this.btnExportarExcel.Size = new System.Drawing.Size(100, 28);
+            this.btnExportarExcel.Click += new System.EventHandler(this.btnExportarExcel_Click);
+
             // ============================================================
             // GRID
             // ============================================================
@@ -91,6 +98,12 @@
             this.btnTransferencia.Size = new System.Drawing.Size(120, 30);
             this.btnTransferencia.Click += new System.EventHandler(this.btnTransferencia_Click);
 
+            this.btnPagamentoPN = new System.Windows.Forms.Button();
+            this.btnPagamentoPN.Text = "Pagamento/Recebimento de PN";
+            this.btnPagamentoPN.Location = new System.Drawing.Point(400, 410);
+            this.btnPagamentoPN.Size = new System.Drawing.Size(200, 30);
+            this.btnPagamentoPN.Click += new System.EventHandler(this.btnPagamentoPN_Click);
+
             this.btnFechar.Text = "Fechar";
             this.btnFechar.Location = new System.Drawing.Point(650, 410);
             this.btnFechar.Size = new System.Drawing.Size(120, 30);
@@ -105,12 +118,14 @@
             this.Controls.Add(this.lblFim);
             this.Controls.Add(this.dtFim);
             this.Controls.Add(this.btnFiltrar);
+            this.Controls.Add(this.btnExportarExcel);
 
             this.Controls.Add(this.dgvMov);
 
             this.Controls.Add(this.btnEntrada);
             this.Controls.Add(this.btnSaida);
             this.Controls.Add(this.btnTransferencia);
+            this.Controls.Add(this.btnPagamentoPN);
             this.Controls.Add(this.btnFechar);
 
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -133,6 +148,7 @@
         private System.Windows.Forms.Button btnEntrada;
         private System.Windows.Forms.Button btnSaida;
         private System.Windows.Forms.Button btnTransferencia;
+        private System.Windows.Forms.Button btnPagamentoPN;
         private System.Windows.Forms.Button btnFechar;
     }
 }

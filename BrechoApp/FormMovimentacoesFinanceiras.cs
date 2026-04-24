@@ -81,6 +81,12 @@ namespace BrechoApp
             CarregarMovimentacoes();
         }
 
+        private void btnPagamentoPN_Click(object sender, EventArgs e)
+        {
+            var form = new FormPagamentoPN();
+            form.ShowDialog();
+        }
+
         // ============================================================
         // BOTÃO: FECHAR
         // ============================================================

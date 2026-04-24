@@ -12,6 +12,8 @@
 
         public string Categoria { get; set; }      // Venda, Comissão, Despesa, Transferência...
         public string Descricao { get; set; }
+        // Grupo é populado a partir da tabela CategoriasFinanceiras (não gravado na MovimentacoesFinanceiras)
+        public string Grupo { get; set; } = string.Empty;
 
         public int? IdVenda { get; set; }          // opcional
         public string IdParceiro { get; set; }     // opcional

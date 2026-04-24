@@ -12,6 +12,7 @@ namespace BrechoApp
 
         private void btnCentrosFinanceiros_Click(object sender, EventArgs e)
         {
+            // Open the Centros list as read-only (export only)
             var form = new FormCentroFinanceiro();
             form.ShowDialog();
         }
@@ -22,11 +23,7 @@ namespace BrechoApp
             form.ShowDialog();
         }
 
-        private void btnCategoriasFinanceiras_Click(object sender, EventArgs e)
-        {
-            using var form = new FormCadastroCategoriasFinanceiras();
-            form.ShowDialog(this);
-        }
+        // Categorias Financeiras management moved to Administração. Removed handler.
 
         private void btnFechar_Click(object sender, EventArgs e)
         {

@@ -84,22 +84,7 @@ namespace BrechoApp.Data
         // ============================================================
         public void Inserir(CentroFinanceiro c)
         {
-            using (var conn = new SqliteConnection(_connectionString))
-            {
-                conn.Open();
-
-                var cmd = conn.CreateCommand();
-                cmd.CommandText =
-                @"INSERT INTO CentrosFinanceiros (Nome, Tipo, SaldoAtual, Ativo)
-                  VALUES ($nome, $tipo, $saldo, $ativo)";
-
-                cmd.Parameters.AddWithValue("$nome", c.Nome);
-                cmd.Parameters.AddWithValue("$tipo", c.Tipo);
-                cmd.Parameters.AddWithValue("$saldo", c.SaldoAtual);
-                cmd.Parameters.AddWithValue("$ativo", c.Ativo);
-
-                cmd.ExecuteNonQuery();
-            }
+            throw new InvalidOperationException("Operação não permitida: Centros Financeiros são entidades fixas gerenciadas pelo sistema.");
         }
 
         // ============================================================
@@ -107,27 +92,7 @@ namespace BrechoApp.Data
         // ============================================================
         public void Atualizar(CentroFinanceiro c)
         {
-            using (var conn = new SqliteConnection(_connectionString))
-            {
-                conn.Open();
-
-                var cmd = conn.CreateCommand();
-                cmd.CommandText =
-                @"UPDATE CentrosFinanceiros
-                  SET Nome = $nome,
-                      Tipo = $tipo,
-                      SaldoAtual = $saldo,
-                      Ativo = $ativo
-                  WHERE IdCentroFinanceiro = $id";
-
-                cmd.Parameters.AddWithValue("$nome", c.Nome);
-                cmd.Parameters.AddWithValue("$tipo", c.Tipo);
-                cmd.Parameters.AddWithValue("$saldo", c.SaldoAtual);
-                cmd.Parameters.AddWithValue("$ativo", c.Ativo);
-                cmd.Parameters.AddWithValue("$id", c.IdCentroFinanceiro);
-
-                cmd.ExecuteNonQuery();
-            }
+            throw new InvalidOperationException("Operação não permitida: Centros Financeiros são entidades fixas gerenciadas pelo sistema.");
         }
 
         // ============================================================
@@ -135,19 +100,7 @@ namespace BrechoApp.Data
         // ============================================================
         public void Excluir(int id)
         {
-            using (var conn = new SqliteConnection(_connectionString))
-            {
-                conn.Open();
-
-                var cmd = conn.CreateCommand();
-                cmd.CommandText =
-                @"DELETE FROM CentrosFinanceiros
-                  WHERE IdCentroFinanceiro = $id";
-
-                cmd.Parameters.AddWithValue("$id", id);
-
-                cmd.ExecuteNonQuery();
-            }
+            throw new InvalidOperationException("Operação não permitida: Centros Financeiros são entidades fixas gerenciadas pelo sistema.");
         }
 
         // ============================================================
