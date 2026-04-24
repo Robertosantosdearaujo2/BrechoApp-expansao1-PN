@@ -26,7 +26,11 @@
             this.btnEntrada = new System.Windows.Forms.Button();
             this.btnSaida = new System.Windows.Forms.Button();
             this.btnTransferencia = new System.Windows.Forms.Button();
+            this.btnPagamentoPN = new System.Windows.Forms.Button();
             this.btnFechar = new System.Windows.Forms.Button();
+
+            // >>> Botão Exportar Excel <<<
+            this.btnExportarExcel = new System.Windows.Forms.Button();
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvMov)).BeginInit();
             this.SuspendLayout();
@@ -51,8 +55,9 @@
             this.btnFiltrar.Size = new System.Drawing.Size(80, 28);
             this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
 
-            // Botão Exportar Excel
-            this.btnExportarExcel = new System.Windows.Forms.Button();
+            // ============================================================
+            // BOTÃO EXPORTAR EXCEL
+            // ============================================================
             this.btnExportarExcel.Text = "Exportar Excel";
             this.btnExportarExcel.Location = new System.Drawing.Point(530, 10);
             this.btnExportarExcel.Size = new System.Drawing.Size(100, 28);
@@ -98,7 +103,6 @@
             this.btnTransferencia.Size = new System.Drawing.Size(120, 30);
             this.btnTransferencia.Click += new System.EventHandler(this.btnTransferencia_Click);
 
-            this.btnPagamentoPN = new System.Windows.Forms.Button();
             this.btnPagamentoPN.Text = "Pagamento/Recebimento de PN";
             this.btnPagamentoPN.Location = new System.Drawing.Point(400, 410);
             this.btnPagamentoPN.Size = new System.Drawing.Size(200, 30);
@@ -150,5 +154,8 @@
         private System.Windows.Forms.Button btnTransferencia;
         private System.Windows.Forms.Button btnPagamentoPN;
         private System.Windows.Forms.Button btnFechar;
+
+        // >>> DECLARAÇÃO DO BOTÃO EXPORTAR EXCEL <<<
+        private System.Windows.Forms.Button btnExportarExcel;
     }
 }
